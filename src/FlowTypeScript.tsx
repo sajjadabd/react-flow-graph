@@ -19,6 +19,7 @@ import "reactflow/dist/style.css";
 
 import CustomNode from "./CustomNode";
 
+/*
 const initialNodes: Node[] = [
   {
     id: "1",
@@ -35,11 +36,32 @@ const initialNodes: Node[] = [
     position: { x: 400, y: 200 },
   },
 ];
+*/
+
+const initialNodes: Node[] = [];
+
+for (let i = 1; i <= 70; i++) {
+  const newNode = {
+    id: i.toString(),
+    data: { label: `Node ${i}` },
+    position: {
+      x: Math.floor((Number(i) - 1) % 4) * 200,
+      y: Math.floor((Number(i) - 1) / 4) * 50,
+    }, // Adjust the position as needed
+  };
+  initialNodes.push(newNode);
+}
 
 const initialEdges: Edge[] = [
   { id: "e1-2", source: "1", target: "2", animated: true },
   { id: "e1-3", source: "1", target: "3" },
 ];
+
+/*
+initialEdges.map(
+  (item, _) => (initialNodes[Number(item.source) - 1].type = "input")
+);
+*/
 
 const nodeTypes = {
   custom: CustomNode,
@@ -55,7 +77,7 @@ let nodeId = 5;
 
 const Flow = () => {
   const reactFlowInstance = useReactFlow();
-  const onClick = useCallback(() => {
+  const addExtraNode = useCallback(() => {
     const id = `${++nodeId}`;
     const newNode = {
       id,
@@ -88,9 +110,11 @@ const Flow = () => {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeClick={(e, node) => console.log(node)}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         fitView
+        minZoom={0.1}
       >
         <Controls />
         <Background variant={variant} gap={12} size={1} />
@@ -107,7 +131,7 @@ const Flow = () => {
           </button>
         </Panel> */}
       </ReactFlow>
-      <button onClick={onClick} className="btn-add">
+      <button onClick={addExtraNode} className="btn-add">
         add node
       </button>
     </div>
