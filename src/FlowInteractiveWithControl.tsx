@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import ReactFlow, {
-  MiniMap,
   Controls,
   Background,
   Edge,
@@ -8,20 +7,21 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   addEdge,
-  NodeToolbar,
 } from "reactflow";
+
+import { Nodes, Edges } from "./Graph";
 
 import "reactflow/dist/style.css";
 
-const initialNodes = [
-  { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
-  { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
-];
-const initialEdges = [{ id: "e1-2", source: "1", target: "2", animated: true }];
+// const initialNodes = [
+//   { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
+//   { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
+// ];
+// const initialEdges = [{ id: "e1-2", source: "1", target: "2", animated: true }];
 
 export default function FlowInteractiveWithControl() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(Nodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(Edges);
 
   const onConnect = useCallback(
     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
