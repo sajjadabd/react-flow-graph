@@ -1,12 +1,13 @@
 import "./App.css";
-import Flow from "./Flow";
-import FlowInteractive from "./FlowInteractive";
+// import Flow from "./Flow";
+// import FlowInteractive from "./FlowInteractive";
+import FlowInteractiveWithControl from "./FlowInteractiveWithControl";
 
 function App() {
   return (
     <>
       <div className="card">
-        <FlowInteractive />
+        <FlowInteractiveWithControl />
       </div>
     </>
   );
