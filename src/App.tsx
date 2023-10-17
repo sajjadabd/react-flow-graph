@@ -1,17 +1,15 @@
-
-import './App.css'
-import Flow from './Flow'
+import "./App.css";
+import Flow from "./Flow";
+import FlowInteractive from "./FlowInteractive";
 
 function App() {
-
-
   return (
     <>
       <div className="card">
-        <Flow />
+        <FlowInteractive />
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
