@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import ReactFlow, {
+  ReactFlowProvider,
   Node,
   addEdge,
   Background,
@@ -8,6 +9,7 @@ import ReactFlow, {
   Connection,
   useNodesState,
   useEdgesState,
+  useReactFlow,
   // Panel,
 } from "reactflow";
 
@@ -49,14 +51,33 @@ enum BackgroundVariant {
   Cross = "cross",
 }
 
-const FlowTypeScript = () => {
+let nodeId = 5;
+
+const Flow = () => {
+  const reactFlowInstance = useReactFlow();
+  const onClick = useCallback(() => {
+    const id = `${++nodeId}`;
+    const newNode = {
+      id,
+      position: {
+        x: Math.random() * 500,
+        y: Math.random() * 500,
+      },
+      data: {
+        label: `Node ${id}`,
+      },
+    };
+    reactFlowInstance.addNodes(newNode);
+  }, []);
+
   const [variant, setVariant] = useState(BackgroundVariant.Dots);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect = useCallback(
     (params: Edge | Connection) =>
-      setEdges((els) => addEdge({ ...params, animated: true }, els)),
+      // setEdges((els) => addEdge({ ...params, animated: true }, els)),
+      setEdges((els) => addEdge({ ...params }, els)),
     [setEdges]
   );
 
@@ -86,7 +107,18 @@ const FlowTypeScript = () => {
           </button>
         </Panel> */}
       </ReactFlow>
+      <button onClick={onClick} className="btn-add">
+        add node
+      </button>
     </div>
+  );
+};
+
+const FlowTypeScript = () => {
+  return (
+    <ReactFlowProvider>
+      <Flow />
+    </ReactFlowProvider>
   );
 };
 
