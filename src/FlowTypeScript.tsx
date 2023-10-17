@@ -1,12 +1,14 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import ReactFlow, {
   Node,
   addEdge,
   Background,
   Edge,
+  Controls,
   Connection,
   useNodesState,
   useEdgesState,
+  // Panel,
 } from "reactflow";
 
 // import CustomNode from "./CustomNode";
@@ -41,7 +43,15 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
+enum BackgroundVariant {
+  Lines = "lines",
+  Dots = "dots",
+  Cross = "cross",
+}
+
 const FlowTypeScript = () => {
+  const [variant, setVariant] = useState(BackgroundVariant.Dots);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect = useCallback(
@@ -61,7 +71,20 @@ const FlowTypeScript = () => {
         nodeTypes={nodeTypes}
         fitView
       >
-        <Background gap={12} size={1} />
+        <Controls />
+        <Background variant={variant} gap={12} size={1} />
+        {/* <Panel position="top-left">
+          <div>variant:</div>
+          <button onClick={() => setVariant(BackgroundVariant.Dots)}>
+            dots
+          </button>
+          <button onClick={() => setVariant(BackgroundVariant.Lines)}>
+            lines
+          </button>
+          <button onClick={() => setVariant(BackgroundVariant.Cross)}>
+            cross
+          </button>
+        </Panel> */}
       </ReactFlow>
     </div>
   );
