@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
   ReactFlowProvider,
   Node,
@@ -10,6 +10,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   useReactFlow,
+  useViewport,
   // Panel,
 } from "reactflow";
 
@@ -40,14 +41,22 @@ const initialNodes: Node[] = [
 
 const initialNodes: Node[] = [];
 
-for (let i = 1; i <= 70; i++) {
+const maxNodes = 1000;
+let nodeId = maxNodes;
+
+for (let i = 1; i <= maxNodes; i++) {
   const newNode = {
     id: i.toString(),
     data: { label: `Node ${i}` },
     position: {
       x: Math.floor((Number(i) - 1) % 4) * 200,
-      y: Math.floor((Number(i) - 1) / 4) * 50,
+      y: Math.floor((Number(i) - 1) / 4) * 100,
     }, // Adjust the position as needed
+    animated: true, // Set animated to true
+    animatedPosition: {
+      x: Math.floor((Number(i) - 1) % 4) * 200,
+      y: Math.floor((Number(i) - 1) / 4) * 100,
+    },
   };
   initialNodes.push(newNode);
 }
@@ -73,10 +82,15 @@ enum BackgroundVariant {
   Cross = "cross",
 }
 
-let nodeId = 5;
-
 const Flow = () => {
   const reactFlowInstance = useReactFlow();
+
+  const { x, y, zoom } = useViewport();
+
+  useEffect(() => {
+    console.log(x, y, zoom);
+  }, [x, y, zoom]);
+
   const addExtraNode = useCallback(() => {
     const id = `${++nodeId}`;
     const newNode = {
@@ -110,11 +124,20 @@ const Flow = () => {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onNodeClick={(e, node) => console.log(node)}
+        // onNodeClick={(e, node) => console.log(node)}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         fitView
-        minZoom={0.1}
+        minZoom={0.5}
+        // onFocus={(e) => console.log(e)}
+        snapToGrid={true}
+        snapGrid={[25, 25]}
+        onlyRenderVisibleElements={true}
+        elementsSelectable={true}
+        elevateNodesOnSelect={true}
+        autoPanOnNodeDrag={true}
+        onAnimationStart={() => {}}
+        onAnimationEnd={() => {}}
       >
         <Controls />
         <Background variant={variant} gap={12} size={1} />
