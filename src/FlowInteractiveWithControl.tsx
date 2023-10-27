@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import ReactFlow, {
   Controls,
   Background,
@@ -7,9 +7,13 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   addEdge,
+  useViewport,
+  ReactFlowProvider,
 } from "reactflow";
 
 import { Nodes, Edges } from "./Graph";
+
+import CustomNode from "./CustomNode";
 
 import "reactflow/dist/style.css";
 
@@ -19,7 +23,17 @@ import "reactflow/dist/style.css";
 // ];
 // const initialEdges = [{ id: "e1-2", source: "1", target: "2", animated: true }];
 
-export default function FlowInteractiveWithControl() {
+const nodeTypes = {
+  custom: CustomNode,
+};
+
+function FlowInteractive() {
+  const { x, y, zoom } = useViewport();
+
+  useEffect(() => {
+    console.log(x, y, zoom);
+  }, [x, y, zoom]);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(Nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(Edges);
 
@@ -32,11 +46,20 @@ export default function FlowInteractiveWithControl() {
     <div style={{ width: "100vw", height: "100vh" }}>
       <ReactFlow
         nodes={nodes}
-        edges={edges}
+        // edges={edges}
+        nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        fitView
+        onlyRenderVisibleElements={true}
+        elementsSelectable={true}
+        elevateNodesOnSelect={true}
+        snapToGrid={true}
+        snapGrid={[25, 25]}
+        maxZoom={5}
+        minZoom={0.5}
+
+        // fitView
       >
         <Controls />
         {/* <MiniMap /> */}
@@ -45,3 +68,13 @@ export default function FlowInteractiveWithControl() {
     </div>
   );
 }
+
+const FlowInteractiveWithControl = () => {
+  return (
+    <ReactFlowProvider>
+      <FlowInteractive />
+    </ReactFlowProvider>
+  );
+};
+
+export default FlowInteractiveWithControl;

@@ -41,29 +41,32 @@ const initialNodes: Node[] = [
 
 const initialNodes: Node[] = [];
 
-const maxNodes = 1000;
+const maxNodes = 700;
 let nodeId = maxNodes;
+
+const numberOfNodesEachRow = 30;
 
 for (let i = 1; i <= maxNodes; i++) {
   const newNode = {
     id: i.toString(),
-    data: { label: `Node ${i}` },
+    data: { label: `${i}` },
+    type: "custom",
     position: {
-      x: Math.floor((Number(i) - 1) % 4) * 200,
-      y: Math.floor((Number(i) - 1) / 4) * 100,
+      x: Math.floor((Number(i) - 1) % numberOfNodesEachRow) * 200,
+      y: Math.floor((Number(i) - 1) / numberOfNodesEachRow) * 100,
     }, // Adjust the position as needed
     animated: true, // Set animated to true
     animatedPosition: {
-      x: Math.floor((Number(i) - 1) % 4) * 200,
-      y: Math.floor((Number(i) - 1) / 4) * 100,
+      x: Math.floor((Number(i) - 1) % numberOfNodesEachRow) * 200,
+      y: Math.floor((Number(i) - 1) / numberOfNodesEachRow) * 100,
     },
   };
   initialNodes.push(newNode);
 }
 
 const initialEdges: Edge[] = [
-  { id: "e1-2", source: "1", target: "2", animated: true },
-  { id: "e1-3", source: "1", target: "3" },
+  { id: "e1-2", source: "1", target: "2", label: "to the", animated: true },
+  { id: "e1-3", source: "1", target: "3", label: "to the" },
 ];
 
 /*
@@ -128,7 +131,7 @@ const Flow = () => {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         fitView
-        minZoom={0.5}
+        minZoom={0.1}
         // onFocus={(e) => console.log(e)}
         snapToGrid={true}
         snapGrid={[25, 25]}
